@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.registry.Registry;
 
 /**
  *
@@ -23,9 +24,10 @@ public class Server {
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
         socket = new ServerSocket(9090); //specifing the port 9090 
+        Registry registry=java.rmi.registry.LocateRegistry.createRegistry(1099);
         while(true){
             Socket clientsocket=socket.accept();
-            ClientThread thread=new ClientThread(clientsocket);
+            ClientThread thread=new ClientThread(clientsocket,registry);
             thread.start();
         }
         //clientsocket =socket.accept(); //let any client to be connected to server

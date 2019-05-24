@@ -11,7 +11,11 @@ import static distibuted.project.Server.socket;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -233,6 +237,7 @@ public class UpdatePatient extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
+            /*try {
             // TODO add your handling code here:
             os.writeUTF("3");
             os.writeUTF("2");
@@ -259,7 +264,31 @@ public class UpdatePatient extends javax.swing.JFrame {
             jTextField6.setText("");
             jTextField7.setText("");
             jTextArea1.setText("");
-        } catch (IOException ex) {
+            } catch (IOException ex) {
+            Logger.getLogger(UpdatePatient.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
+            String name = jTextField1.getText();
+            String age = jTextField2.getText();
+            String bills = jTextField7.getText();
+            String phnumber = jTextField4.getText();
+            String dr = jTextField5.getText();
+            String status = jTextArea1.getText();
+            String Address = jTextField3.getText();
+            FunctionsInterface hello = (FunctionsInterface) Naming.lookup("//localhost/nader");
+            hello.update(jTextField6.getText(), name, Address, age, phnumber, status, dr, bills);
+            jTextField1.setText("");
+            jTextField2.setText("");
+            jTextField3.setText("");
+            jTextField4.setText("");
+            jTextField5.setText("");
+            jTextField6.setText("");
+            jTextField7.setText("");
+            jTextArea1.setText("");
+        } catch (NotBoundException ex) {
+            Logger.getLogger(UpdatePatient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(UpdatePatient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
             Logger.getLogger(UpdatePatient.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -271,6 +300,7 @@ public class UpdatePatient extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
+            /*try {
             // TODO add your handling code here:
             os.writeUTF("3");
             os.writeUTF("1");
@@ -283,7 +313,24 @@ public class UpdatePatient extends javax.swing.JFrame {
             jTextField5.setText(is.readUTF());
             jTextField7.setText(is.readUTF());
             
-        } catch (IOException ex) {
+            } catch (IOException ex) {
+            Logger.getLogger(UpdatePatient.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
+            FunctionsInterface hello=(FunctionsInterface) Naming.lookup("//localhost/nader");
+            String output[]=hello.update_select(jTextField6.getText());
+            jTextField1.setText(output[0]);
+            jTextField2.setText(output[1]);
+            jTextField4.setText(output[2]);
+            jTextField3.setText(output[3]);
+            jTextArea1.setText(output[4]);
+            jTextField5.setText(output[5]);
+            jTextField7.setText(output[6]);
+            
+        } catch (NotBoundException ex) {
+            Logger.getLogger(UpdatePatient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(UpdatePatient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
             Logger.getLogger(UpdatePatient.class.getName()).log(Level.SEVERE, null, ex);
         }
         

@@ -8,7 +8,11 @@ package distibuted.project;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -119,12 +123,22 @@ public class SelectPatient extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
+            /*try {
             // TODO add your handling code here:
             String id = jTextField1.getText();
             os.writeUTF("1");
             os.writeUTF(id);
             jTextArea1.setText(is.readUTF());
-        } catch (IOException ex) {
+            } catch (IOException ex) {
+            Logger.getLogger(SelectPatient.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
+            FunctionsInterface hello=(FunctionsInterface) Naming.lookup("//localhost/nader");
+            jTextArea1.setText(hello.select(jTextField1.getText()));
+        } catch (NotBoundException ex) {
+            Logger.getLogger(SelectPatient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(SelectPatient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
             Logger.getLogger(SelectPatient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed

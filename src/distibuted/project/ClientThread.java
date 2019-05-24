@@ -11,6 +11,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.rmi.AccessException;
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,11 +30,12 @@ public class ClientThread extends Thread{
     Socket socket;
     DataOutputStream os;
     DataInputStream is;
+    Registry r;
     
-    static Statement st;
-    static CallableStatement cs;
-    public ClientThread(Socket s){
+    
+    public ClientThread(Socket s,Registry r){
         this.socket=s;
+        this.r=r;
     }
     @Override
     public void run() {  
@@ -38,12 +43,16 @@ public class ClientThread extends Thread{
             Connection conn=DB.getconnection();
             PreparedStatement stmt;
             ResultSet rs;
+           
             
             try {
                 while (true){
                     is=new DataInputStream(socket.getInputStream());
                     os=new DataOutputStream(socket.getOutputStream());
-                    String ch=is.readUTF();
+                    
+                    //Registry r= java.rmi.registry.LocateRegistry.getRegistry(1089);
+                    r.bind("nader", new Functions(is,os));
+                    /*String ch=is.readUTF();
                     if(ch.equals("1")){
                         String sql ="select * from patent where id="+is.readUTF()+";";
                         stmt=conn.prepareCall(sql);
@@ -61,7 +70,7 @@ public class ClientThread extends Thread{
                          }
                         os.writeUTF(output);
                     }
-                    else if(ch.equals("2")){
+                    if(ch.equals("2")){
                         conn=DB.getconnection();
                         String sql="INSERT INTO `patent`(`name`,`address`,`age`,`phnumber`,`Status`,`supervisorDr`,`Bills`) values(?,?,?,?,?,?,?);";    
                         try {
@@ -117,14 +126,16 @@ public class ClientThread extends Thread{
                         }
                         
                         
-                    }
+                    }*/
                     
                 }
                 
                 
             } catch (IOException ex) {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } catch (AlreadyBoundException ex) {
+                Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+            } 
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

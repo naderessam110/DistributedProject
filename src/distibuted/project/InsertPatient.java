@@ -12,7 +12,11 @@ import static distibuted.project.SelectPatient.os;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -203,6 +207,7 @@ public class InsertPatient extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
+            /*try {
             // TODO add your handling code here:
             String name = jTextField1.getText();
             String age = jTextField2.getText();
@@ -226,7 +231,30 @@ public class InsertPatient extends javax.swing.JFrame {
             jTextField5.setText("");
             jTextField6.setText("");
             jTextArea1.setText("");
-        } catch (IOException ex) {
+            } catch (IOException ex) {
+            Logger.getLogger(InsertPatient.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
+            String name = jTextField1.getText();
+            String age = jTextField2.getText();
+            String bills = jTextField3.getText();
+            String phnumber = jTextField4.getText();
+            String dr = jTextField5.getText();
+            String status = jTextArea1.getText();
+            String Address = jTextField6.getText();
+            FunctionsInterface hello=(FunctionsInterface) Naming.lookup("//localhost/nader");
+            hello.insert(name,Address,age,phnumber,status,dr,bills);
+            jTextField1.setText("");
+            jTextField2.setText("");
+            jTextField3.setText("");
+            jTextField4.setText("");
+            jTextField5.setText("");
+            jTextField6.setText("");
+            jTextArea1.setText("");
+        } catch (NotBoundException ex) {
+            Logger.getLogger(InsertPatient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(InsertPatient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
             Logger.getLogger(InsertPatient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
